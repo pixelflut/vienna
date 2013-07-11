@@ -73,7 +73,7 @@ module Vienna
           :urls => Dir.glob("#{option_hash[:root]}/*").map { |fn| fn.gsub(/#{option_hash[:root]}/, '')},
           :root => option_hash[:root],
           :index => 'index.html',
-          :header_rules => [[:all, {'Cache-Control' => 'public, max-age=#{option_hash[:max_age]}'}]]
+          :header_rules => [[:all, {'Cache-Control' => "public, max-age=#{option_hash[:max_age]}"}]]
         
         run NotFound.new("#{option_hash[:root]}/404.html")
       end
