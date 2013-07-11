@@ -64,10 +64,10 @@ module Vienna
   
   class Application
     def initialize(option_hash = {})
-      {
+      option_hash = {
         :root     => 'public',
         :max_age  => 3600
-      }.merge!(option_hash)
+      }.merge(option_hash)
       @app = Rack::Builder.new do
         use Rack::Static,
           :urls => Dir.glob("#{option_hash[:root]}/*").map { |fn| fn.gsub(/#{option_hash[:root]}/, '')},
