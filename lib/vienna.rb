@@ -54,21 +54,28 @@ module Vienna
   # 
   # Examples
   #
-  #     run Vienna::Application.new('_site')
+  #     run Vienna::Application.new({
+  #                                   :root     => '_site',
+  #                                   :max_age  => 86400
+  #                                 })
   #
   #     run Vienna::Application.new # The root defaults to 'public'
   #
   
   class Application
-    def initialize(root = 'public')
+    def initialize(option_hash = {})
+      option_hash.merge!({
+        :root     => 'public',
+        :max_age  => 3600
+      })
       @app = Rack::Builder.new do
         use Rack::Static,
-          :urls => Dir.glob("#{root}/*").map { |fn| fn.gsub(/#{root}/, '')},
-          :root => root,
+          :urls => Dir.glob("#{option_hash[:root]}/*").map { |fn| fn.gsub(/#{option_hash[:root]}/, '')},
+          :root => option_hash[:root],
           :index => 'index.html',
-          :header_rules => [[:all, {'Cache-Control' => 'public, max-age=3600'}]]
+          :header_rules => [[:all, {'Cache-Control' => 'public, max-age=#{option_hash[:max_age]}'}]]
         
-        run NotFound.new("#{root}/404.html")
+        run NotFound.new("#{option_hash[:root]}/404.html")
       end
     end
     
